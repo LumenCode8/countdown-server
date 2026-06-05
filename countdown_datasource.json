@@ -1,0 +1,37 @@
+{
+  "countdown": {
+    "event": {
+      "eventName": "Event Countdown to June 19 Midnight",
+      "eventDate": "2026-06-19T00:00:00+10:00",
+      "timezone": "AEST"
+    },
+    "timeRemaining": {
+      "days": 13,
+      "hours": 10,
+      "minutes": 34,
+      "seconds": 15
+    },
+    "formattedDisplay": {
+      "daysDisplay": "13 Days",
+      "hoursDisplay": "10 Hours",
+      "minutesDisplay": "34 Minutes",
+      "secondsDisplay": "15 Seconds",
+      "fullCountdown": "13d 10h 34m 15s",
+      "shortCountdown": "13 days left"
+    },
+    "totalTimeUnits": {
+      "totalDays": 13,
+      "totalHours": 322,
+      "totalMinutes": 19374,
+      "totalSeconds": 1162455
+    },
+    "percentageRemaining": {
+      "percentOfDay": 42
+    },
+    "metadata": {
+      "lastUpdated": "2026-06-05T13:25:45+10:00",
+      "updateFrequency": "1 second",
+      "status": "active"
+    }
+  }
+}
