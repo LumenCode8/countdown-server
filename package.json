@@ -1,0 +1,13 @@
+{
+  "name": "visionedge-countdown-server",
+  "version": "1.0.0",
+  "description": "Real-time countdown server for VisionEDGE DSD data integration",
+  "main": "countdown-server.js",
+  "scripts": {
+    "start": "node countdown-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -1,0 +1,308 @@
+COUNTDOWN LAYER TEMPLATE IMPLEMENTATION GUIDE
+VisionEDGE DSD Generic Data Source Integration
+
+================================================================================
+OVERVIEW
+================================================================================
+
+This guide explains how to use the countdown data sources (XML/JSON) with 
+VisionEDGE DSD's Widgets tool to create a countdown layer template that displays
+time remaining until 12:00 AM AEST on June 19, 2026.
+
+Target Audience: Countdown event (13 days, 10 hours, 34 minutes remaining as of June 5, 2026)
+
+================================================================================
+SETUP STEPS
+================================================================================
+
+STEP 1: CONFIGURE THE GENERIC DATA SOURCE
+------------------------------------------
+
+In VisionEDGE DSD Director, navigate to:
+  Designer > Data Integration > Data Sources > Create New Data Source
+
+Configure as follows:
+  - Data Source Name: "June19Countdown" (or your preferred name)
+  - Data Source Type: Generic (supports XML or JSON)
+  - Update Frequency: 1 second (for real-time countdown updates)
+  - Content Format: Select XML or JSON (see provided files)
+
+Upload your countdown data:
+  - Use countdown_datasource.xml OR countdown_datasource.json
+  - Configure field mapping for output display
+
+
+STEP 2: CONFIGURE FIELD MAPPING FOR OUTPUT
+-------------------------------------------
+
+Map the following fields from your data source for display in widgets:
+
+RECOMMENDED FIELD MAPPINGS:
+
+  Output Field       Data Source Field        Description
+  ─────────────────────────────────────────────────────────
+  DaysRemaining      days                     Numeric days left
+  HoursRemaining     hours                    Numeric hours left
+  MinutesRemaining   minutes                  Numeric minutes left
+  SecondsRemaining   seconds                  Numeric seconds left
+  
+  DaysLabel          daysDisplay              "13 Days" (formatted)
+  HoursLabel         hoursDisplay             "10 Hours" (formatted)
+  MinutesLabel       minutesDisplay           "34 Minutes" (formatted)
+  SecondsLabel       secondsDisplay           "15 Seconds" (formatted)
+  
+  FullCountdown      fullCountdown            "13d 10h 34m 15s"
+  ShortCountdown     shortCountdown           "13 days left"
+  
+  EventName          eventName                "Event Countdown..."
+  UpdatedTime        lastUpdated              Last data update timestamp
+
+
+STEP 3: CREATE THE WIDGET LAYOUT
+---------------------------------
+
+In VisionEDGE DSD Director, navigate to:
+  Designer > Widgets > New Widget
+
+Build your countdown display using these components:
+
+LAYOUT EXAMPLE 1: SIMPLE COUNTDOWN (TextToScreen widgets)
+──────────────────────────────────────────────────────────
+
+Layer 1 (Bottom): Graphic Component
+  - Add a background image (1920x1080 recommended)
+  - Position: Full screen
+  
+Layer 2: Text Area Component (Main Days)
+  - Bind to: Days field (or daysDisplay)
+  - Font: Large, bold (recommended 120-180pt)
+  - Color: White or contrast color
+  - Position: Center of screen
+  - Text: "DaysRemaining" field value
+  
+Layer 3: Text Area Component (Subtitle)
+  - Bind to: eventName field
+  - Font: Medium (30-40pt)
+  - Position: Below main days display
+  
+Layer 4: Text Area Component (Supporting Text)
+  - Bind to: fullCountdown field
+  - Font: Medium (24-32pt)
+  - Position: Below subtitle
+
+
+LAYOUT EXAMPLE 2: DETAILED BREAKDOWN (Multiple Text Areas)
+───────────────────────────────────────────────────────────
+
+Layer 1 (Bottom): Graphic Component
+  - Background image
+  
+Layer 2: Text Area - "DAYS"
+  - Bind to: daysLabel (displays "13 Days")
+  - Position: Left quadrant
+  
+Layer 3: Text Area - "HOURS"
+  - Bind to: hoursLabel (displays "10 Hours")
+  - Position: Center-left quadrant
+  
+Layer 4: Text Area - "MINUTES"
+  - Bind to: minutesLabel (displays "34 Minutes")
+  - Position: Center-right quadrant
+  
+Layer 5: Text Area - "SECONDS"
+  - Bind to: secondsLabel (displays "15 Seconds")
+  - Position: Right quadrant
+
+
+LAYOUT EXAMPLE 3: SCOREBOARD STYLE (List Component)
+─────────────────────────────────────────────────────
+
+If using List Component for tabular display:
+
+Layer 1: Graphic Component (scoreboard background)
+
+Layer 2: List Component
+  - Configure for vertical layout
+  - Add rows for:
+    • Event: {eventName}
+    • Days Remaining: {days}
+    • Hours: {hours}
+    • Minutes: {minutes}
+    • Seconds: {seconds}
+    • Status: {status}
+
+
+STEP 4: DATA BINDING IN THE WIDGET
+-----------------------------------
+
+For each Text Area or List Component:
+
+1. Right-click component > Data Binding
+2. Select Data Source: "June19Countdown"
+3. Select Field: Choose the mapped output field
+4. Apply the binding
+
+The widget will automatically pull and display:
+  - Current countdown values
+  - Updates at 1-second intervals
+  - Formatted display strings
+
+
+STEP 5: PUBLISH AND DEPLOY
+---------------------------
+
+After completing your widget design:
+
+1. Save the Widget
+   - Designer > Widgets > Save Widget
+   - Verify all layers and bindings are correct
+
+2. Create a Playlist
+   - Library > Create New Playlist
+   - Type: Widget
+   - Select your countdown widget
+
+3. Create an Event Script
+   - Designer > Scripts > Create New Event Script
+   - Add the countdown playlist
+   - Set playback duration (recommend 10-60 seconds per cycle)
+
+4. Schedule for Display
+   - Designer > Schedules > Assign Script to Zone/Gate
+   - Select your countdown script
+   - Choose timing (continuous or specific times)
+
+5. Publish to DMP
+   - Publish script to media player
+   - Monitor Proof of Play
+
+
+================================================================================
+DATA STRUCTURE REFERENCE
+================================================================================
+
+The countdown data source includes these field groups:
+
+EVENT METADATA:
+  - eventName: Display name for the countdown
+  - eventDate: Target date/time (2026-06-19T00:00:00+10:00)
+  - timezone: AEST
+
+TIME REMAINING (numeric):
+  - days: 13
+  - hours: 10
+  - minutes: 34
+  - seconds: 15
+
+FORMATTED DISPLAY (ready to display):
+  - daysDisplay: "13 Days"
+  - hoursDisplay: "10 Hours"
+  - minutesDisplay: "34 Minutes"
+  - secondsDisplay: "15 Seconds"
+  - fullCountdown: "13d 10h 34m 15s"
+  - shortCountdown: "13 days left"
+
+TOTAL TIME UNITS (cumulative):
+  - totalDays: 13
+  - totalHours: 322
+  - totalMinutes: 19374
+  - totalSeconds: 1162455
+
+PERCENTAGE & STATUS:
+  - percentOfDay: 42 (% of current day completed)
+  - status: "active"
+  - lastUpdated: Timestamp of last data refresh
+
+
+================================================================================
+UPDATING COUNTDOWN DATA
+================================================================================
+
+MANUAL UPDATE (Static Data):
+If using static JSON/XML files, the countdown values must be manually updated
+daily or as needed to reflect remaining time.
+
+DYNAMIC UPDATE (Live Calculation):
+For automatic countdown that decreases in real-time, configure the data source
+to recalculate every second. This requires:
+  1. API endpoint that calculates time remaining
+  2. Or: Use VisionEDGE DSD's scheduled data refresh
+  3. Or: External script that updates the data source feed
+
+
+RECOMMENDED REFRESH FREQUENCY: 1 second
+This ensures the countdown appears to count down smoothly on displays.
+
+
+================================================================================
+DESIGN RECOMMENDATIONS
+================================================================================
+
+TEXT AREA SIZING:
+  - Days display: Large (120-180pt font)
+  - Supporting text: Medium (24-40pt font)
+  - Labels: Medium (30-40pt font)
+  - Background contrast ratio: 4.5:1 minimum
+
+COLOR SCHEMES:
+  Option 1: White text on dark background (high contrast)
+  Option 2: Brand colors with white text
+  Option 3: Gradient background with contrasting text
+
+ANIMATION (optional):
+  If using external tool, create:
+  - Animated background
+  - Pulsing or fading effect on numbers
+  - Smooth transitions between time updates
+
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Issue: Widget not displaying countdown values
+  → Verify data source is activated
+  → Check field mapping is correct
+  → Confirm data binding in Text Area components
+
+Issue: Countdown not updating in real-time
+  → Increase update frequency to 1 second
+  → Check data source refresh schedule
+  → Verify DMP network connectivity
+
+Issue: Values showing incorrect time remaining
+  → Update JSON/XML source files with current calculations
+  → Verify timezone is set to AEST (+10:00)
+  → Check event date is correct: 2026-06-19T00:00:00
+
+Issue: Formatting appears cut off
+  → Adjust Text Area bounding box size
+  → Reduce font size
+  → Test with shorter string values
+
+
+================================================================================
+REFERENCE FILES
+================================================================================
+
+Three countdown data source formats are provided:
+
+1. countdown_datasource.xml
+   - Hierarchical XML structure
+   - Best for generic data sources
+   - Easy field mapping
+
+2. countdown_datasource.json
+   - JSON object structure
+   - Alternative format support
+   - Easy API integration
+
+3. countdown_datasource.tsv
+   - Tab-separated values
+   - Best for table/list-based widgets
+   - Simple field-value pairs
+
+
+Choose the format that best matches your VisionEDGE DSD configuration.
+
+================================================================================
